@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo Clientes</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+  <div class="dashboard-container">
+    <div class="top-bar">
+      <h1>Clientes</h1>
+      <a href="index.html" class="logout-btn">Regresar</a>
+    </div>
+
+    <!-- CRUD Opciones -->
+    <div class="cards">
+      <a href="#" class="card"><i class="fas fa-user-plus"></i>Agregar Cliente</a>
+      <a href="#" class="card"><i class="fas fa-edit"></i>Editar Cliente</a>
+      <a href="#" class="card"><i class="fas fa-user-times"></i>Eliminar Cliente</a>
+    </div>
+
+    <!-- Filtros -->
+    <form>
+      <label for="status">Filtrar por Status:</label>
+      <select id="status">
+        <option value="todos">Todos</option>
+        <option value="Check-In">Check-In</option>
+        <option value="Check-Out">Check-Out</option>
+        <option value="MTR">MTR (Pendiente de pago)</option>
+      </select>
+      <button type="button" onclick="filtrarClientes()">Aplicar Filtros</button>
+    </form>
+
+    <!-- Tabla de Clientes -->
+    <table id="tablaClientes">
+      <thead>
+        <tr>
+          <th>Nombre</th><th>Apellido</th><th>Habitación</th><th>Folio</th><th>Folio Ext.</th><th>Procedencia</th><th>Agencia</th>
+          <th>Llegada</th><th>Salida</th><th>Noches</th><th>Personas</th><th>Tarifa</th><th>Saldo</th><th>Ingreso Renta</th><th>Status</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Juan</td><td>Pérez</td><td>101</td><td>F001</td><td>EXT001</td><td>Web</td><td>Booking</td>
+          <td>2024-03-20</td><td>2024-03-23</td><td>3</td><td>2</td><td>$1500</td><td style="color: green;">-500</td><td>$1300</td><td>Check-In</td>
+          <td><button onclick="expandirCuenta(this)">Ver Cuenta</button></td>
+        </tr>
+        <tr class="detalles" style="display:none;">
+          <td colspan="16">
+            <form onsubmit="return false;">
+              <label>Cargo ($):</label>
+              <input type="number" class="cargo" placeholder="Ej: 500">
+              <label>Abono ($):</label>
+              <input type="number" class="abono" placeholder="Ej: 200">
+              <button type="button" onclick="aplicarOperacion(this)">Aplicar</button>
+              <button type="button" onclick="realizarCheckout(this)" style="background-color:#27ae60;">Check-Out</button>
+            </form>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Carlos</td><td>Ramírez</td><td>103</td><td>F003</td><td>EXT003</td><td>Web</td><td>Directo</td>
+          <td>2024-03-22</td><td>2024-03-25</td><td>3</td><td>2</td><td>$2000</td><td style="color: red;">2000</td><td>$1800</td><td>MTR</td>
+          <td><button onclick="expandirCuenta(this)">Ver Cuenta</button></td>
+        </tr>
+        <tr class="detalles" style="display:none;">
+          <td colspan="16">
+            <form onsubmit="return false;">
+              <label>Cargo ($):</label>
+              <input type="number" class="cargo" placeholder="Ej: 500">
+              <label>Abono ($):</label>
+              <input type="number" class="abono" placeholder="Ej: 200">
+              <button type="button" onclick="aplicarOperacion(this)">Aplicar</button>
+              <button type="button" onclick="realizarCheckout(this)" style="background-color:#27ae60;">Check-Out</button>
+            </form>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function filtrarClientes() {
+      const statusFiltro = document.getElementById('status').value;
+      const filas = document.querySelectorAll('#tablaClientes tbody tr');
+
+      for (let i = 0; i < filas.length; i += 2) {
+        const fila = filas[i];
+        const status = fila.cells[14].textContent.trim();
+        const detalle = filas[i + 1];
+        if (statusFiltro === 'todos' || status === statusFiltro) {
+          fila.style.display = '';
+          detalle.style.display = 'none';
+        } else {
+          fila.style.display = 'none';
+          detalle.style.display = 'none';
+        }
+      }
+    }
+
+    function expandirCuenta(btn) {
+      const fila = btn.closest('tr');
+      const detalle = fila.nextElementSibling;
+      detalle.style.display = detalle.style.display === 'none' ? '' : 'none';
+    }
+
+    function aplicarOperacion(boton) {
+      const form = boton.closest('form');
+      const cargo = parseFloat(form.querySelector('.cargo').value) || 0;
+      const abono = parseFloat(form.querySelector('.abono').value) || 0;
+
+      const detalle = boton.closest('tr');
+      const clienteFila = detalle.previousElementSibling;
+      const saldoCelda = clienteFila.cells[12];
+      let saldo = parseFloat(saldoCelda.textContent);
+
+      saldo += cargo;
+      saldo -= abono;
+
+      saldoCelda.textContent = saldo;
+
+      // Cambiar color según saldo
+      saldoCelda.style.color = saldo < 0 ? 'green' : 'red';
+    }
+
+    function realizarCheckout(boton) {
+      const detalle = boton.closest('tr');
+      const clienteFila = detalle.previousElementSibling;
+
+      clienteFila.cells[14].textContent = 'Check-Out'; // Cambiar el status
+      detalle.style.display = 'none'; // Colapsar la cuenta
+      alert('Cliente en Check-Out');
+    }
+  </script>
+</body>
+
+</html>
