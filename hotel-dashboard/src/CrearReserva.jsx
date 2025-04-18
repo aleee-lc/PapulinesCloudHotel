@@ -15,20 +15,26 @@ const FormularioReserva = () => {
     salida: '',
     personas: 1,
     tarifa: 0,
-    ingreso_renta: 0,
-    saldo: 0,
     status: 'Reservada'
   });
 
   const handleChange = (e) => {
-    setReserva({ ...reserva, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    let updatedReserva = { ...reserva, [name]: value };
+
+    if (name === 'tarifa') {
+      const tarifa = parseFloat(value);
+      updatedReserva.ingreso_renta = tarifa ? (tarifa / 1.19).toFixed(2) : 0;
+    }
+
+    setReserva(updatedReserva);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const noches = Math.ceil((new Date(reserva.salida) - new Date(reserva.llegada)) / (1000 * 60 * 60 * 24));
-      const payload = { ...reserva, noches: noches };
+      const payload = { ...reserva, noches: noches, ingreso_renta: (reserva.tarifa / 1.19).toFixed(2) };
       await axios.post('http://localhost:3000/api/reservas', payload);
       alert('Reserva registrada correctamente');
       setReserva({ ...reserva, nombre: '', apellido: '', habitacion: '', folio: '', folio_ext: '', llegada: '', salida: '' });
@@ -91,12 +97,8 @@ const FormularioReserva = () => {
           <input type="number" name="tarifa" value={reserva.tarifa} onChange={handleChange} />
         </div>
         <div className="input-container">
-          <label>Ingreso Renta</label>
-          <input type="number" name="ingreso_renta" value={reserva.ingreso_renta} onChange={handleChange} />
-        </div>
-        <div className="input-container">
-          <label>Saldo</label>
-          <input type="number" name="saldo" value={reserva.saldo} onChange={handleChange} />
+          <label>Ingreso Renta (automático)</label>
+          <input type="text" name="ingreso_renta" value={reserva.ingreso_renta || ''} readOnly />
         </div>
 
         <button type="submit" className="submit-btn">Guardar Reserva</button>
