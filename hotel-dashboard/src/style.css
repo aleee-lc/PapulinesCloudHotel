@@ -173,7 +173,7 @@ table tr:hover {
   font-family: 'Arial', sans-serif;
   padding: 20px;
   background-color: #f4f6f9;
-  min-height: 100vh;
+  min-height: 80vh;
 }
 
 .top-bar {
@@ -260,4 +260,48 @@ table tr:hover {
 }
 
 
-  
+.formulario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 900px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.formulario .input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.formulario label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #2a5298;
+}
+
+.formulario input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.submit-btn {
+  grid-column: 1 / -1;
+  padding: 15px;
+  background-color: #2a5298;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #1e3c72;
+}
