@@ -15,13 +15,6 @@ function App() {
         {/* Menú de navegación */}
         <nav className="top-bar">
           <h2>Papulines Cloud Hotel</h2>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <Link className="logout-btn" to="/">Dashboard</Link>
-            <Link className="logout-btn" to="/clientes">Clientes</Link>
-            <Link className="logout-btn" to="/reservas">Reservas</Link>
-            <Link className="logout-btn" to="/habitaciones">Habitaciones</Link>
-            <Link className="logout-btn" to="/configuraciones">Configuración</Link>
-          </div>
         </nav>
 
         <Routes>

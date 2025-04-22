@@ -305,3 +305,208 @@ table tr:hover {
 .submit-btn:hover {
   background-color: #1e3c72;
 }
+/* Estilo para contenedor del estado de cuenta */
+.estado-cuenta-container {
+  overflow-x: auto;
+  max-width: 100%;
+  margin-top: 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* Ajustes visuales para la tabla */
+.estado-cuenta-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.estado-cuenta-container th,
+.estado-cuenta-container td {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.estado-cuenta-container th {
+  background-color: #2a5298;
+  color: white;
+}
+
+.estado-cuenta-container tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.estado-cuenta-container {
+  overflow-x: auto;
+  max-width: 100%;
+  margin-top: 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.estado-cuenta-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.estado-cuenta-container th,
+.estado-cuenta-container td {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.estado-cuenta-container th {
+  background-color: #2a5298;
+  color: white;
+}
+
+.estado-cuenta-container tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Asegura que la tabla de reservas no se desborde */
+.tabla-reservas {
+  table-layout: fixed;
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Estilo para contenedor del estado de cuenta */
+.estado-cuenta-container {
+  overflow-x: auto;
+  max-width: 100%;
+  margin-top: 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.estado-cuenta-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.estado-cuenta-container th,
+.estado-cuenta-container td {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.estado-cuenta-container th {
+  background-color: #2a5298;
+  color: white;
+}
+
+.estado-cuenta-container tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.dashboard-container,
+.formulario,
+.estado-cuenta-container {
+  color: #333 !important; /* texto oscuro para contrastar con fondo blanco */
+}
+
+.formulario input,
+.formulario select {
+  color: #333;
+  background-color: #fff;
+}
+
+table th,
+table td {
+  color: #333;
+}
+
+.logout-btn {
+  color: white;
+  font-weight: bold;
+}
+
+.logout-btn:hover {
+  background-color: #b02a2a;
+}
+
+.top-bar h1,
+.top-bar h2 {
+  color: white !important;
+  font-weight: 600;
+}
+
+
+.rack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.habitacion-box {
+  padding: 20px;
+  background-color: #fdfdfd;
+  border: 3px solid;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.habitacion-box:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.habitacion-detalle {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  margin-top: 30px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.habitacion-detalle h2 {
+  margin-bottom: 15px;
+  color: #2a5298;
+}
+
+.habitacion-detalle p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.badge-tipo {
+  display: inline-block;
+  padding: 5px 12px;
+  font-size: 13px;
+  border-radius: 20px;
+  background-color: #e2e6ea;
+  color: #2a5298;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.submit-btn {
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+}

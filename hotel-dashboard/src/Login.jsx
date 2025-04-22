@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import './style.css'; // Usa los mismos estilos del dashboard
+import './style.css'; 
 
 const Login = ({ onLogin }) => {
   const [usuario, setUsuario] = useState('');
