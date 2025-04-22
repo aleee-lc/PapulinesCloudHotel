@@ -1,33 +1,23 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Dashboard from './Dashboard';
-import Clientes from './Clientes';
-import Reservas from './Reservas';
-import Habitaciones from './Habitaciones';
-import Configuracion from './Configuraciones';
-import FormularioReserva from './CrearReserva';
-import './style.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './Login';
+import AppRoutes from './AppRoutes';
 
-function App() {
+const App = () => {
+  const [usuario, setUsuario] = useState(null);
+
   return (
     <Router>
-      <div className="App">
-        {/* Menú de navegación */}
-        <nav className="top-bar">
-          <h2>Papulines Cloud Hotel</h2>
-        </nav>
-
-        <Routes>
-          <Route path="/" element={<Dashboard usuario="PapulinesAdmin" />} />
-          <Route path="/clientes" element={<Clientes />} />
-          <Route path="/reservas" element={<Reservas />} />
-          <Route path="/habitaciones" element={<Habitaciones />} />
-          <Route path="/configuracion" element={<Configuracion />} />
-          <Route path="/nueva-reserva" element={<FormularioReserva />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login onLogin={(nombre) => setUsuario(nombre)} />} />
+        <Route
+          path="/*"
+          element={usuario ? <AppRoutes usuario={usuario} /> : <Navigate to="/login" />}
+        />
+      </Routes>
     </Router>
   );
-}
+};
 
 export default App;
