@@ -1,26 +1,37 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import axios from 'axios';
+//import { useNavigate } from 'react-router-dom';
+//import '@fortawesome/fontawesome-free/css/all.min.css';
 import './style.css';
+import { useNavigate } from 'react-router-dom';
 
-const Login = ({ onLogin }) => {
-  const [usuario, setUsuario] = useState('');
+const Login = ({onLogin}) => {
+  const [nombre, setNombre] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const manejarSubmit = (e) => {
+  const manejarSubmit = async (e) => {
     e.preventDefault();
+    console.log('Intentando login:', nombre, contrasena);
+    try {
+      const res = await axios.post('http://localhost:3000/api/login', {
+        nombre,
+        contraseña: contrasena
+      }, {
+        withCredentials: true
+      });
 
-    const usuarioDemo = 'admin';
-    const contrasenaDemo = '1234';
+      console.log('Login exitoso:', res.data);
 
-    if (usuario === usuarioDemo && contrasena === contrasenaDemo) {
-      setError('');
-      onLogin(usuario);
-      navigate('/dashboard');
-    } else {
-      setError('Usuario o contraseña incorrectos');
+      if (res.data.usuario) {
+        onLogin(res.data.usuario.nombre); // Guarda el usuario en App
+        navigate('/'); // redirige al dashboard
+      }
+    } catch (err) {
+      //console.error(err);
+      console.error('Error en login:', err.response?.data || err.message);
+      setError(err.response?.data?.error || 'Error al iniciar sesión');
     }
   };
 
@@ -33,13 +44,13 @@ const Login = ({ onLogin }) => {
           <input
             type="text"
             placeholder="Usuario"
-            value={usuario}
-            onChange={(e) => setUsuario(e.target.value)}
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
             required
           />
         </div>
         <div className="input-container">
-          <i className="fa-solid fa-lock"></i>
+          <i className="fa-solid fa-key"></i>
           <input
             type="password"
             placeholder="Contraseña"

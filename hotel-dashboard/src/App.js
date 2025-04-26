@@ -9,7 +9,6 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login onLogin={(nombre) => setUsuario(nombre)} />} />
         <Route
           path="/*"

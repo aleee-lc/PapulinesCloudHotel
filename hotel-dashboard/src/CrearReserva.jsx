@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './style.css';
 
@@ -6,7 +6,7 @@ const FormularioReserva = () => {
   const [reserva, setReserva] = useState({
     nombre: '',
     apellido: '',
-    habitacion: '',
+    numero: '',
     folio: '',
     folio_ext: '',
     procedencia: '',
@@ -15,34 +15,73 @@ const FormularioReserva = () => {
     salida: '',
     personas: 1,
     tarifa: 0,
+    ingreso_renta: 0,
     status: 'Reservada'
   });
 
+  // Corregido: ahora sí tienes handleChange
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let updatedReserva = { ...reserva, [name]: value };
-
-    if (name === 'tarifa') {
-      const tarifa = parseFloat(value);
-      updatedReserva.ingreso_renta = tarifa ? (tarifa / 1.19).toFixed(2) : 0;
-    }
-
-    setReserva(updatedReserva);
+    setReserva({
+      ...reserva,
+      [name]: value
+    });
   };
+
+  useEffect(() => {
+    const fetchTarifa = async () => {
+      if (reserva.numero && reserva.llegada && reserva.salida) {
+        try {
+          const res = await axios.get(`http://localhost:3000/api/habitaciones/numero/${reserva.numero}`);
+          const tarifa = res.data.tarifa;
+
+          const llegada = new Date(reserva.llegada);
+          const salida = new Date(reserva.salida);
+
+          // Convertir a medianoche para evitar desfase horario
+          llegada.setHours(0, 0, 0, 0);
+          salida.setHours(0, 0, 0, 0);
+
+          // Calcular noches
+          const diffTime = salida.getTime() - llegada.getTime();
+          const noches = Math.max(1, Math.round(diffTime / (1000 * 60 * 60 * 24)));
+          const total_bruto = tarifa * noches;
+          const ingreso_renta = parseFloat(((tarifa * noches) / 1.19).toFixed(2));
+
+
+          setReserva(prev => ({
+            ...prev,
+            tarifa,
+            ingreso_renta,
+            total_bruto
+          }));
+        } catch (error) {
+          console.error('Error al obtener tarifa:', error.response?.data || error.message);
+          setReserva(prev => ({
+            ...prev,
+            tarifa: 0,
+            ingreso_renta: 0,
+            total_bruto: 0
+          }));
+        }
+      }
+    };
+
+    fetchTarifa();
+  }, [reserva.numero, reserva.llegada, reserva.salida]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const noches = Math.ceil((new Date(reserva.salida) - new Date(reserva.llegada)) / (1000 * 60 * 60 * 24));
-      const payload = { ...reserva, noches: noches, ingreso_renta: (reserva.tarifa / 1.19).toFixed(2) };
-      await axios.post('http://localhost:3000/api/reservas', payload);
+      await axios.post('http://localhost:3000/api/reservas', reserva);
       alert('Reserva registrada correctamente');
-      setReserva({ ...reserva, nombre: '', apellido: '', habitacion: '', folio: '', folio_ext: '', llegada: '', salida: '' });
+      window.location.reload();
     } catch (error) {
-      console.error(error);
+      console.error('Error al guardar reserva:', error.response?.data || error.message);
       alert('Error al registrar reserva');
     }
   };
+
 
   return (
     <div className="dashboard-container">
@@ -62,7 +101,7 @@ const FormularioReserva = () => {
         </div>
         <div className="input-container">
           <label>Habitación</label>
-          <input name="habitacion" value={reserva.habitacion} onChange={handleChange} required />
+          <input name="numero" value={reserva.numero} onChange={handleChange} required />
         </div>
         <div className="input-container">
           <label>Folio</label>
@@ -94,11 +133,15 @@ const FormularioReserva = () => {
         </div>
         <div className="input-container">
           <label>Tarifa</label>
-          <input type="number" name="tarifa" value={reserva.tarifa} onChange={handleChange} />
+          <input type="number" name="tarifa" value={reserva.tarifa} readOnly/>
         </div>
         <div className="input-container">
-          <label>Ingreso Renta (automático)</label>
+          <label>Ingreso Renta</label>
           <input type="text" name="ingreso_renta" value={reserva.ingreso_renta || ''} readOnly />
+        </div>
+        <div className="input-container">
+          <label>Total a Pagar</label>
+          <input type="text" name="total_bruto" value={reserva.total_bruto || ''} readOnly />
         </div>
 
         <button type="submit" className="submit-btn">Guardar Reserva</button>

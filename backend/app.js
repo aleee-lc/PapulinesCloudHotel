@@ -1,33 +1,33 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const pool = require('./db');
+import express from 'express';
+import session from 'express-session';
+import cors from 'cors';
+import authRoutes from './routes/authRoutes.js';
+import reservasRoutes from './routes/reservasRoutes.js';
+import habitacionesRoutes from './routes/habitacionesRoutes.js';
 
 const app = express();
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+const PORT = 3000;
 
-app.post('/login', async (req, res) => {
-  const { usuario, contrasena } = req.body;
+app.use(cors({
+  origin: 'http://localhost:3001',
+  credentials: true
+}));
 
-  try {
-    const [rows] = await pool.query(
-      'SELECT * FROM usuarios WHERE nombre = ? AND contrasena = ?',
-      [usuario, contrasena]
-    );
+app.use(express.json());
 
-    if (rows.length > 0) {
-      res.send('Login exitoso. Bienvenido al sistema.');
-    } else {
-      res.status(401).send('Usuario o contraseña incorrectos');
-    }
-  } catch (err) {
-    console.error('Error en login:', err);
-    res.status(500).send('Error interno del servidor');
-  }
-});
+app.use(session({
+  secret: 'papulines-secret',
+  resave: false,
+  saveUninitialized: true
+}));
 
-app.listen(3000, () => {
-  console.log('Servidor corriendo en http://localhost:3000');
+app.use('/api', authRoutes);
+
+app.use('/api/reservas', reservasRoutes);
+
+app.use('/api/habitaciones', habitacionesRoutes);
+
+
+app.listen(PORT, () => {
+  console.log(`Servidor backend corriendo en http://localhost:${PORT}`);
 });
