@@ -7,10 +7,10 @@ import Habitaciones from './Habitaciones';
 import Configuracion from './Configuraciones';
 import FormularioReserva from './CrearReserva';
 
-const AppRoutes = () => {
+const AppRoutes = ({usuario}) => {
   return (
     <Routes>
-      <Route path="/dashboard" element={<Dashboard usuario="PapulinesAdmin" />} />
+      <Route path="/" element={<Dashboard usuario={usuario} />} />
       <Route path="/clientes" element={<Clientes />} />
       <Route path="/reservas" element={<Reservas />} />
       <Route path="/habitaciones" element={<Habitaciones />} />

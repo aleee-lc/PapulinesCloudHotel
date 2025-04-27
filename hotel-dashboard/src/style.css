@@ -6,12 +6,13 @@
   }
   
   body {
-    background: linear-gradient(to right, #c4cfe2, #c4cfe2);
+    min-height: 100vh;
+    margin: 0;
     font-family: 'Segoe UI', sans-serif;
     color: #fff;
-    height: 100vh;
+    background: linear-gradient(to right, #c4cfe2, #c4cfe2);
     display: flex;
-    align-items: center;
+    align-items: center; 
     justify-content: center;
   }
   
@@ -243,7 +244,7 @@ table tr:hover {
 }
 
 .card i {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 10px;
 }
 
