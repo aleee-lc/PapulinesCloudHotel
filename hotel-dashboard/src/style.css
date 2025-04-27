@@ -527,3 +527,13 @@ body.modo-oscuro .top-bar {
 body.modo-oscuro .card:hover {
   background-color: #2a2a2a;
 }
+
+.tipo-cambio-card {
+  background-color: #1e3c72;
+  color: white;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  text-align: center;
+}
