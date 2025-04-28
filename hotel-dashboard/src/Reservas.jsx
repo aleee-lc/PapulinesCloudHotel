@@ -1,39 +1,37 @@
 // Código actualizado para incluir filtro por fecha + edición + estado de cuenta
-
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.css';
 
 const Reservas = () => {
-  const [reservaActiva, setReservaActiva] = useState(null);
-  const [tipo, setTipo] = useState('cargo');
-  const [concepto, setConcepto] = useState('');
-  const [monto, setMonto] = useState(0);
-  const [nota, setNota] = useState('');
-  const [mostrarEstadoCuenta, setMostrarEstadoCuenta] = useState(false);
-  const [filtroInicio, setFiltroInicio] = useState('');
-  const [filtroFin, setFiltroFin] = useState('');
   const navigate = useNavigate();
 
-  const reservas = [
-    {
-      nombre: "Andrea",
-      apellido: "Castillo",
-      habitacion: "202",
-      folio: "R1001",
-      folio_ext: "EXT-R1001",
-      procedencia: "Web",
-      agencia: "Booking",
-      llegada: "2024-04-18",
-      salida: "2024-04-21",
-      noches: 3,
-      personas: 2,
-      tarifa: 1800,
-      saldo: -500,
-      ingreso_renta: 1512.61,
-      status: "Check-In"
-    }
-  ];
+  const [filtroInicio, setFiltroInicio] = useState('');
+  const [filtroFin, setFiltroFin] = useState('');
+  const [reservaActiva, setReservaActiva] = useState(null);
+  const [mostrarEstadoCuenta, setMostrarEstadoCuenta] = useState(false);
+
+  const [tipo, setTipo] = useState('cargo');
+  const [monto, setMonto] = useState(0);
+  const [concepto, setConcepto] = useState('');
+  const [nota, setNota] = useState('');
+
+  const [reservas, setReservas] = useState([]);
+
+  useEffect(() => {
+    const obtenerReservas = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/reservas'); // ajusta la URL si es diferente
+        setReservas(response.data); // o response.data.data si tu API lo envía dentro de un "data"
+      } catch (error) {
+        console.error('Error al obtener reservas:', error);
+      }
+    };
+  
+    obtenerReservas();
+  }, []);
+  
 
   const movimientos = [
     {
@@ -110,8 +108,8 @@ const Reservas = () => {
         <thead>
           <tr>
             <th>Nombre</th><th>Apellido</th><th>Habitación</th><th>Folio</th><th>Folio Ext.</th>
-            <th>Procedencia</th><th>Agencia</th><th>Llegada</th><th>Salida</th><th>Noches</th>
-            <th>Personas</th><th>Tarifa</th><th>Saldo</th><th>Ingreso Renta</th><th>Status</th>
+            <th>Procedencia</th><th>Agencia</th><th>Llegada</th><th>Salida</th>
+            <th>Personas</th><th>Tarifa</th><th>Saldo</th><th>Ingreso Renta</th><th>Total Bruto</th>
           </tr>
         </thead>
         <tbody>
@@ -125,14 +123,13 @@ const Reservas = () => {
                 <td>{r.folio_ext}</td>
                 <td>{r.procedencia}</td>
                 <td>{r.agencia}</td>
-                <td>{r.llegada}</td>
-                <td>{r.salida}</td>
-                <td>{r.noches}</td>
+                <td>{new Date(r.llegada).toLocaleDateString()}</td>
+                <td>{new Date(r.salida).toLocaleDateString()}</td>
                 <td>{r.personas}</td>
                 <td>${r.tarifa}</td>
                 <td style={{ color: r.saldo < 0 ? 'green' : 'red' }}>{r.saldo}</td>
                 <td>${r.ingreso_renta}</td>
-                <td>{r.status}</td>
+                <td>${r.total_bruto}</td>
               </tr>
               {reservaActiva?.folio === r.folio && (
                 <tr>
